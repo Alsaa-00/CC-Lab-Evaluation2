@@ -1,0 +1,5 @@
+NAME                        READY   STATUS    RESTARTS   AGE     IP           NODE           NOMINATED NODE   READINESS GATES
+backend-79fc7c5dbc-7bdn8    1/1     Running   0          64s     10.244.2.8   kind-worker    <none>           <none>
+backend-79fc7c5dbc-hq26q    1/1     Running   0          2m20s   10.244.1.7   kind-worker2   <none>           <none>
+backend-79fc7c5dbc-qzxd4    1/1     Running   0          2m21s   10.244.2.7   kind-worker    <none>           <none>
+frontend-767cf6f78c-zhmwd   1/1     Running   0          32m     10.244.2.6   kind-worker    <none>           <none>

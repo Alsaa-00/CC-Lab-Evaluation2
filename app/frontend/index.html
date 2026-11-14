@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS | Kubernetes Monitor</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #080d1b;
+    --panel: #111a2e;
+    --border: rgba(148,163,184,.14);
+    --muted: #91a0b9;
+    --text: #edf2ff;
+    --purple: #9b8cff;
+    --cyan: #55d9ed;
+    --green: #39d99a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background:
+      radial-gradient(ellipse at 15% 0%, #24205a 0%, transparent 36%),
+      radial-gradient(ellipse at 90% 20%, #10334a 0%, transparent 30%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1250px;
+    margin: auto;
+    padding: 30px 24px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 42px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+    background: linear-gradient(135deg, #8b5cf6, #22d3ee);
+    box-shadow: 0 0 25px #8b5cf655;
+}
+
+.brand h2 {
+    font-size: 21px;
+    letter-spacing: 2px;
+}
+
+.brand p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.connection {
+    border: 1px solid var(--border);
+    background: #111a2eaa;
+    border-radius: 30px;
+    padding: 11px 17px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-right: 8px;
+    box-shadow: 0 0 10px var(--green);
+}
+
+.hero {
+    margin-bottom: 32px;
+}
+
+.tag {
+    display: inline-block;
+    color: #b8aaff;
+    background: #8b5cf622;
+    border: 1px solid #8b5cf644;
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 11px;
+    margin-bottom: 17px;
+}
+
+.hero h1 {
+    font-size: clamp(30px, 5vw, 48px);
+    line-height: 1.15;
+    letter-spacing: -2px;
+}
+
+.hero h1 span {
+    background: linear-gradient(90deg, #a78bfa, #67e8f9);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    color: var(--muted);
+    margin-top: 14px;
+    line-height: 1.7;
+    max-width: 650px;
+    font-size: 14px;
+}
+
+.section-title {
+    font-size: 14px;
+    margin-bottom: 16px;
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.card {
+    background: linear-gradient(145deg, #17233b, #10182a);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 21px;
+    transition: .25s;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: #8b5cf677;
+    box-shadow: 0 12px 35px #0004;
+}
+
+.card-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.card-value {
+    font-size: 30px;
+    font-weight: 800;
+    margin: 16px 0 8px;
+}
+
+.card-note {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.purple { color: var(--purple); }
+.cyan { color: var(--cyan); }
+.green { color: var(--green); }
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.panel {
+    background: #111a2edb;
+    border: 1px solid var(--border);
+    border-radius: 19px;
+    padding: 23px;
+}
+
+.panel h3 {
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+
+.subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 23px;
+}
+
+.node {
+    background: #18243b;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 16px;
+    margin-top: 12px;
+}
+
+.node-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.node-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status {
+    color: var(--green);
+    font-size: 10px;
+    background: #39d99a16;
+    padding: 6px 9px;
+    border-radius: 20px;
+}
+
+.pod {
+    display: inline-block;
+    background: #8b5cf622;
+    border: 1px solid #8b5cf644;
+    color: #c4b5fd;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 10px;
+    margin: 3px;
+}
+
+.strategy {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.strategy:last-child {
+    border-bottom: none;
+}
+
+.strategy strong {
+    font-size: 12px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.strategy p {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.api-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    background: #18243b;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.api-status span {
+    font-size: 12px;
+}
+
+.api-status strong {
+    font-size: 11px;
+    color: var(--green);
+}
+
+button {
+    background: linear-gradient(100deg, #8b5cf6, #397ce9);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 17px;
+    font-weight: 600;
+    font-size: 11px;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px #8b5cf655;
+}
+
+footer {
+    text-align: center;
+    color: #64748b;
+    font-size: 11px;
+    padding: 25px 0 5px;
+}
+
+@media(max-width: 850px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .content-grid { grid-template-columns: 1fr; }
+}
+
+@media(max-width: 480px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .container { padding: 22px 14px; }
+    .card { padding: 15px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+    <div class="brand">
+        <div class="logo">✦</div>
+        <div>
+            <h2>NEXUS</h2>
+            <p>CLOUD INFRASTRUCTURE MONITOR</p>
+        </div>
+    </div>
+
+    <div class="connection">
+        <span class="dot" id="connectionDot"></span>
+        <span id="connectionText">Checking backend...</span>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="tag">✦ KUBERNETES SCHEDULING INTELLIGENCE</div>
+    <h1>Pod Placement <span>Monitor.</span></h1>
+    <p>
+        Monitor your application infrastructure and understand how
+        Kubernetes schedules workloads using Pod Affinity and
+        Anti-Affinity policies.
+    </p>
+</section>
+
+<h3 class="section-title">Infrastructure Overview</h3>
+
+<div class="grid">
+    <div class="card">
+        <div class="card-label">CLUSTER</div>
+        <div class="card-value purple">KIND</div>
+        <div class="card-note">Local Kubernetes cluster</div>
+    </div>
+
+    <div class="card">
+        <div class="card-label">FRONTEND</div>
+        <div class="card-value cyan">01</div>
+        <div class="card-note">Frontend deployment replica</div>
+    </div>
+
+    <div class="card">
+        <div class="card-label">BACKEND TARGET</div>
+        <div class="card-value green">02</div>
+        <div class="card-note">Configured backend replicas</div>
+    </div>
+
+    <div class="card">
+        <div class="card-label">NAMESPACE</div>
+        <div class="card-value purple" style="font-size:23px">POD</div>
+        <div class="card-note">pod-placement</div>
+    </div>
+</div>
+
+<div class="content-grid">
+
+    <section class="panel">
+        <h3>Cluster Topology</h3>
+        <p class="subtitle">Your Kind cluster worker layout</p>
+
+        <div class="node">
+            <div class="node-top">
+                <span class="node-name">◈ kind-worker</span>
+                <span class="status">● READY</span>
+            </div>
+            <span class="pod">Frontend Pod</span>
+            <span class="pod">Backend Pod</span>
+        </div>
+
+        <div class="node">
+            <div class="node-top">
+                <span class="node-name">◈ kind-worker2</span>
+                <span class="status">● READY</span>
+            </div>
+            <span class="pod">Backend Pod</span>
+        </div>
+
+        <p class="subtitle" style="margin-top:15px;margin-bottom:0">
+            Topology shown as an illustrative layout. Live placement
+            data will be connected in the next integration step.
+        </p>
+    </section>
+
+    <section class="panel">
+        <h3>Scheduling Policies</h3>
+        <p class="subtitle">Kubernetes placement strategies</p>
+
+        <div class="strategy">
+            <strong class="purple">01 · Pod Affinity</strong>
+            <p>Prefers placing related application Pods on the same node.</p>
+        </div>
+
+        <div class="strategy">
+            <strong class="cyan">02 · Preferred Anti-Affinity</strong>
+            <p>Tries to distribute matching Pods across different nodes.</p>
+        </div>
+
+        <div class="strategy">
+            <strong class="green">03 · Required Anti-Affinity</strong>
+            <p>Prevents matching Pods from sharing the same node.</p>
+        </div>
+    </section>
+
+</div>
+
+<section class="panel">
+    <h3>Backend Connectivity</h3>
+    <p class="subtitle">Live communication with the FastAPI service</p>
+
+    <div class="api-status">
+        <span>FastAPI Health Check</span>
+        <strong id="apiStatus">Checking...</strong>
+    </div>
+
+    <div class="api-status">
+        <span>Backend Response</span>
+        <strong id="apiMessage">Waiting...</strong>
+    </div>
+
+    <button onclick="checkBackend()">↻ Refresh Connection</button>
+</section>
+
+<footer>
+    NEXUS · Kubernetes Pod Affinity & Anti-Affinity Project<br><br>
+    Cloud Computing Lab Evaluation
+</footer>
+
+</div>
+
+<script>
+async function checkBackend() {
+    const status = document.getElementById("apiStatus");
+    const message = document.getElementById("apiMessage");
+    const connection = document.getElementById("connectionText");
+    const dot = document.getElementById("connectionDot");
+
+    status.textContent = "Checking...";
+    message.textContent = "Waiting...";
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/health");
+
+        if (!response.ok) {
+            throw new Error("Backend returned an error");
+        }
+
+        const data = await response.json();
+
+        status.textContent = "● " + data.status;
+        message.textContent = "Connected";
+        connection.textContent = "Backend Connected";
+        dot.style.background = "#39d99a";
+        dot.style.boxShadow = "0 0 10px #39d99a";
+
+    } catch (error) {
+        status.textContent = "● Offline";
+        status.style.color = "#fb7185";
+        message.textContent = "Unavailable";
+        message.style.color = "#fb7185";
+        connection.textContent = "Backend Disconnected";
+        dot.style.background = "#fb7185";
+        dot.style.boxShadow = "0 0 10px #fb7185";
+    }
+}
+
+checkBackend();
+</script>
+
+</body>
+</html>
