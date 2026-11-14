@@ -1036,14 +1036,6 @@ The main lesson is that the choice between preferred and required rules is a tra
 
 ---
 
-## 24. Team Members
-
-| Name |
-|---|
-| Alsaba A |
-| Rakshita K |
-| Omkar M |
-| Harsh H |
 
 **Project:** NEXUS: Kubernetes Pod Placement Monitor  
 **Course Work:** Cloud Computing Lab Evaluation 2
